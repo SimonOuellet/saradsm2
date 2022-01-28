@@ -1,3 +1,4 @@
+#Video disponible : https://drive.google.com/file/d/1LMcVFiRrGL9l_xflrlUeDbSUeoTTQFJ5/view?usp=sharing
 import pandas as pd
 
 #Charge du fichier JSON dans un DataFrame pandas
