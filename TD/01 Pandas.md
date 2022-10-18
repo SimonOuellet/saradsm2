@@ -64,8 +64,20 @@ Magic pour calculer le temps d'exécution d'une cellule:
 %time  
 
 Pandas : afficher le type de vos colonnes :   
->>df.dtypes
+```
+df.dtypes
+```
 
 Pandas : afficher les 5 premières lignes et 5 dernières:  
->>df.head(5)  
->>df.tail(5)  
+```
+df.head(5)  
+df.tail(5)  
+```
+
+Import de json  
+```
+import json
+with open('parkings-publics-nantes-disponibilites_1210202215.json') as json_file:
+    json_data = json.load(json_file)
+j = pd.DataFrame(json_data['records'])
+```
