@@ -1,0 +1,4 @@
+requests
+configparser
+google-cloud-pubsub
+google-cloud-storage
