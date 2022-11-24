@@ -85,6 +85,57 @@ Création d'une table de données externes.
 #### Utiliser Big Query ML pour mettre en oeuvre un modèle ARIMA+
 [ARIMA+](https://cloud.google.com/bigquery-ml/docs/reference/standard-sql/bigqueryml-syntax-create-time-series)
 
+##### Jeux de données  
+Table : 
+	`sood-365307.parkings_eu.parkings_larochelle_eu` 
+
+##### Exemples de requêtes 
+
+Afficher les données aplaties pour ARIMA+
+
+	SELECT 
+		timestamp_trunc(r.fields.date_comptage, MINUTE) as ds,
+		avg(r.fields.nb_places_disponibles) AS nb_places_disponibles,
+		r.fields.id as id
+	FROM `sood-365307.parkings_eu.parkings_larochelle_eu` as dh
+	CROSS JOIN UNNEST(records) as r
+	WHERE 
+		datetime_trunc(r.fields.date_comptage, day) > '2022-10-01 00:00:00 UTC'
+	GROUP BY id, ds
+	ORDER BY ds asc; 
+
+Création d'un modèle ARIMA+
+
+	CREATE OR REPLACE MODEL `sood-365307.parkings_eu.M_PARKING_LR`
+		OPTIONS(MODEL_TYPE='ARIMA_PLUS',
+         time_series_timestamp_col='ds',
+         time_series_data_col='nb_places_disponibles',
+         time_series_id_col='id',
+         HOLIDAY_REGION='FR')
+	AS
+		SELECT 
+			timestamp_trunc(r.fields.date_comptage, MINUTE) as ds,
+			avg(r.fields.nb_places_disponibles) AS nb_places_disponibles,
+			r.fields.id as id
+		FROM `sood-365307.parkings_eu.parkings_larochelle_eu` as dh
+		CROSS JOIN UNNEST(records) as r
+		WHERE 
+			datetime_trunc(r.fields.date_comptage, day) > '2022-10-01 00:00:00 UTC'
+		GROUP BY id, ds
+		ORDER BY ds asc;
+
+Afficher les informations du modèle
+
+	SELECT * 
+	FROM ML.ARIMA_EVALUATE(MODEL `sood-365307.parkings_eu.M_PARKING_LR`);
+
+Obtenir des prédictions
+
+	SELECT
+	 *
+	FROM
+		 ML.FORECAST(MODEL `sood-365307.parkings_eu.PARKING_ENCAN`,
+             STRUCT(72 AS horizon, 0.8 AS confidence_level))
 ### Réaliser une analyse de performance entre le modèle FB Prophet et ARIMA+  
 
 ### Mettre en oeuvre un service API de prédiction
