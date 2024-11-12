@@ -1,7 +1,7 @@
 # 02 seaborn et matplotlib
 
 ## Livrables attendus
-Réalisez et livrez un Notebook que vous partagerez à so@gleeph.net (Simon OUELLET).
+Réalisez et livrez un Notebook que vous partagerez à simon.ouellet@univ-poitiers.fr (Simon OUELLET).
 
 Votre Notebook devra être nommé : 01pandas_\<Prenom\>-\<Nom\>.ypynb  
 
